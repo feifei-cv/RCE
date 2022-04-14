@@ -17,7 +17,7 @@ Office Home
 CUDA_VISIBLE_DEVICES=0 python train_RCE.py office-home -d OfficeHome -s Ar -t Cl -a resnet50  --log logs/RCE/OfficeHome/OfficeHome_Ar2Cl --early 20
 ```
 
-Office Home
+Office31
 ```
 CUDA_VISIBLE_DEVICES=0 python train_RCE.py office31 -d Office31 -s A -t W -a resnet50  --log logs/RCE/Office31/Office31_A2W --early 15
 ```
