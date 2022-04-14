@@ -1,17 +1,9 @@
-# CST
+# RCE
 Code release for "Unsupervised domain adaptation via risk-consistent estimators" 
 
 ## Prerequisites
 - torch>=1.7.0
 - torchvision
-- qpsolvers
-- numpy
-- prettytable
-- tqdm
-- scikit-learn
-- webcolors
-- matplotlib
-
 
 ## Training
 
