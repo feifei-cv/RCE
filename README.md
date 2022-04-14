@@ -19,7 +19,6 @@ CUDA_VISIBLE_DEVICES=0 python train_RCE.py office-home -d OfficeHome -s Ar -t Cl
 
 
 ## Acknowledgement
-This code is implemented based on the [Transfer Learning Library](https://github.com/thuml/Transfer-Learning-Library/), and it is our pleasure to acknowledge their contributions.
-
-The SAM code is adapted from [https://github.com/davda54/sam](https://github.com/davda54/sam).
+This code is heavily borrowed from  [Transfer Learning Library](https://github.com/thuml/Transfer-Learning-Library/),[CST]( https://github.com/Liuhong99/CST)
+ and it is our pleasure to acknowledge their contributions.
 
