@@ -103,7 +103,7 @@ def opts():
                              'multi node data parallel training')
     args = parser.parse_args()
 
-    data_dir = '/disks/disk0/feifei/paper/paper3-3090/data/'
+    data_dir = '/disks/disk0/feifei/paper/paper3-3090/data/' ### change your own data root
     args.root = data_dir + args.root
 
     if args.data == 'OfficeHome':
