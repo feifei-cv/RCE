@@ -21,7 +21,7 @@ from common.utils.analysis import collect_feature, tsne, a_distance
 from network import ImageClassifier
 from loss import consistency_loss
 from data.prepare_data_da import generate_dataloader as Dataloader
-from loss import WeightAnchor, reg, ent, kld
+from loss import weightAnchor, reg, ent, kld
 from dalib.modules.domain_discriminator import DomainDiscriminator
 from dalib.adaptation.dann import DomainAdversarialLoss
 
@@ -56,7 +56,7 @@ def opts():
     parser.add_argument('-a', '--arch', metavar='ARCH', default='resnet50', choices=architecture_names,
                         help='backbone architecture: ' + ' | '.join(architecture_names) + ' (default: resnet50)')
     parser.add_argument('--bottleneck-dim', default=256, type=int, help='Dimension of bottleneck')
-    parser.add_argument('--temperature', default=2.0, type=float, help='parameter temperature scaling')
+    parser.add_argument('--temperature', default=1.8, type=float, help='parameter temperature scaling')
     parser.add_argument('--trade-off1', default=0.5, type=float,
                         help='hyper-parameter for regularization')
     parser.add_argument('--trade-off2', default=1.0, type=float,
@@ -86,7 +86,7 @@ def opts():
                         help='whether output per-class accuracy during evaluation')
     # pretrain parameters
     parser.add_argument('--pretrain', type=str, default=None, help='pretrain checkpoints for classification model')
-    parser.add_argument('--pretrain-epochs', default=2, type=int, metavar='N',
+    parser.add_argument('--pretrain-epochs', default=0, type=int, metavar='N',
                         help='number of total epochs(pretrain) to run')
     parser.add_argument('--pretrain-lr', '--pretrain-learning-rate', default=0.001, type=float,
                         help='initial pretrain learning rate', dest='pretrain_lr')
@@ -326,12 +326,13 @@ def train(train_source_iter, train_target_iter, model, optimizer, lr_scheduler, 
         ### source noise class posterior estimate
         class_poster_s = predict_kernel.mm(
             torch.inverse(f_t_kernel + 0.001 * torch.eye(args.mu*args.batch_size).to(device))).mm(soft_label_t)
-        class_poster_s = torch.clamp(class_poster_s, 0.00001, 0.99999)
+        class_poster_s = torch.clamp(class_poster_s, 0.00000001, 0.99999999)
         class_poster_s = class_poster_s / (torch.sum(class_poster_s, dim=1).reshape(class_poster_s.shape[0], 1))
 
         ### target noise class posterior estimate
         class_poster_t = f_t_kernel.mm(
             torch.inverse(f_t_kernel + 0.001 * torch.eye(args.mu*args.batch_size).to(device))).mm(soft_label_t)
+        class_poster_t = torch.clamp(class_poster_t, 0.00000001, 0.99999999)
         class_poster_t = class_poster_t / (torch.sum(class_poster_t, dim=1).reshape(class_poster_t.shape[0], 1))
 
         ### get anchor points
@@ -341,7 +342,8 @@ def train(train_source_iter, train_target_iter, model, optimizer, lr_scheduler, 
         anchor_mask = anchor_domain_predictor*anchor_acc
         anchor_points = labels_s[anchor_mask]
         target_test_pred_r_select = class_poster_s[anchor_mask]
-        weight_anchor = WeightAnchor(temperature=args.temperature, alpha=args.alpha)(f_s)[anchor_mask]
+        weights = weightAnchor(f_s,temperature=args.temperature)
+        weight_anchor = weights[anchor_mask]
         #### estimate T
         with torch.no_grad():
             for k in range(transMatrix.size(0)):
@@ -355,9 +357,9 @@ def train(train_source_iter, train_target_iter, model, optimizer, lr_scheduler, 
         ## clean to noise
         y_t_softamx = F.softmax(y_t, dim=1)
         y_t_correct = y_t_softamx.mm(transMatrix.detach())
-        y_t_loss_correct = nn.KLDivLoss()(torch.log(y_t_correct), class_poster_t.detach() / args.temperature)
+        y_t_loss_correct = nn.KLDivLoss()(torch.log(y_t_correct), class_poster_t.detach()/args.temperature) #
         cls_loss = F.cross_entropy(y_s, labels_s)
-        reg_loss = reg(y_t, args.temperatur)/(args.batch_size * args.mu)
+        reg_loss = reg(y_t, args.temperature)/(args.batch_size * args.mu)
         ### reg_loss = kld(y_t, args.num_class, args.temperature) / (args.batch_size * args.mu)
         ### reg_loss = ent(y_t, args.temperature) / (args.batch_size * args.mu)
         # y_t_u_softamx = F.softmax(y_t_u, dim=1)

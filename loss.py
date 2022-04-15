@@ -85,18 +85,12 @@ def reg(logits, temperature):
     weight_sum = torch.sum(pred * entropy_weight, dim=0).unsqueeze(dim=0)
     return torch.sum((1 - torch.sum(pred ** 2 / weight_sum * entropy_weight, dim=-1)))
 
-class WeightAnchor(nn.Module):
 
-    def __init__(self, temperature, alpha):
-        super(WeightAnchor, self).__init__()
-        self.temperature = temperature
-        self.alpha = alpha
-
-    def forward(self, logits):
-        B, C = logits.shape
-        pred = F.softmax(logits / self.temperature, dim=1)  ##
-        entropy_weight = entropy(pred).detach()
-        entropy_weight = 1 + torch.exp(-entropy_weight)
-        entropy_weight = (B * entropy_weight / torch.sum(entropy_weight)).unsqueeze(dim=1)
-        return entropy_weight
+def weightAnchor(logits, temperature):
+    B, C = logits.shape
+    pred = F.softmax(logits / temperature, dim=1)  ##
+    entropy_weight = entropy(pred).detach()
+    entropy_weight = 1 + torch.exp(-entropy_weight)
+    entropy_weight = (B * entropy_weight / torch.sum(entropy_weight)).unsqueeze(dim=1)
+    return entropy_weight
 
