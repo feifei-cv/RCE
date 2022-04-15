@@ -352,7 +352,7 @@ def train(train_source_iter, train_target_iter, model, optimizer, lr_scheduler, 
                     continue
                 else:
                     current = target_test_pred_r_select[indice][weight_anchor[indice].max(dim=0)[1]].detach()
-                    transMatrix[k] = 0.01*current + 0.99* transMatrix[k] ##更update
+                    transMatrix[k] = 0.01*current + 0.99* transMatrix[k] ##update
 
         ## clean to noise
         y_t_softamx = F.softmax(y_t, dim=1)
