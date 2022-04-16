@@ -1,12 +1,12 @@
 #!/usr/bin/env bashclear
 
 # office31
-CUDA_VISIBLE_DEVICES=0 python train_RCE.py office31 -d Office31 -s A -t D -a resnet50  --log logs/RCE/Office31/Office31_A2D --early 15
-CUDA_VISIBLE_DEVICES=0 python train_RCE.py office31 -d Office31 -s A -t W -a resnet50  --log logs/RCE/Office31/Office31_A2W --early 15
-CUDA_VISIBLE_DEVICES=0 python train_RCE.py office31 -d Office31 -s D -t A -a resnet50  --log logs/RCE/Office31/Office31_D2A --early 15
-CUDA_VISIBLE_DEVICES=0 python train_RCE.py office31 -d Office31 -s W -t A -a resnet50  --log logs/RCE/Office31/Office31_W2A --early 15
-CUDA_VISIBLE_DEVICES=0 python train_RCE.py office31 -d Office31 -s D -t W -a resnet50  --log logs/RCE/Office31/Office31_D2W --early 5
-CUDA_VISIBLE_DEVICES=0 python train_RCE.py office31 -d Office31 -s W -t D -a resnet50  --log logs/RCE/Office31/Office31_W2D --early 5
+CUDA_VISIBLE_DEVICES=0 python train_RCE.py office31 -d Office31 -s A -t D -a resnet50  --log logs/RCE/Office31/Office31_A2D --early 10
+CUDA_VISIBLE_DEVICES=0 python train_RCE.py office31 -d Office31 -s A -t W -a resnet50  --log logs/RCE/Office31/Office31_A2W --early 10
+CUDA_VISIBLE_DEVICES=0 python train_RCE.py office31 -d Office31 -s D -t A -a resnet50  --log logs/RCE/Office31/Office31_D2A --early 10
+CUDA_VISIBLE_DEVICES=0 python train_RCE.py office31 -d Office31 -s W -t A -a resnet50  --log logs/RCE/Office31/Office31_W2A --early 10
+CUDA_VISIBLE_DEVICES=0 python train_RCE.py office31 -d Office31 -s D -t W -a resnet50  --log logs/RCE/Office31/Office31_D2W --early 3
+CUDA_VISIBLE_DEVICES=0 python train_RCE.py office31 -d Office31 -s W -t D -a resnet50  --log logs/RCE/Office31/Office31_W2D --early 3
 
 ##### VisDA2017
 CUDA_VISIBLE_DEVICES=0 python train_RCE.py visda-2017 -d VisDA2017 -s Synthetic -t Real -a resnet101 --per-class-eval --log logs/RCE/VisDA2017 --early 20 --mu=1

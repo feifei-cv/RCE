@@ -56,10 +56,10 @@ def opts():
     parser.add_argument('-a', '--arch', metavar='ARCH', default='resnet50', choices=architecture_names,
                         help='backbone architecture: ' + ' | '.join(architecture_names) + ' (default: resnet50)')
     parser.add_argument('--bottleneck-dim', default=256, type=int, help='Dimension of bottleneck')
-    parser.add_argument('--temperature', default=1.8, type=float, help='parameter temperature scaling') #
+    parser.add_argument('--temperature', default=2, type=float, help='parameter temperature scaling') #
     parser.add_argument('--trade-off1', default=0.5, type=float,
                         help='hyper-parameter for regularization')
-    parser.add_argument('--trade-off2', default=1.0, type=float,
+    parser.add_argument('--trade-off2', default=0.5, type=float,
                         help='hyper-parameter for correct loss')
     parser.add_argument('--trade-off3', default=0.5, type=float,
                         help='fixmatch loss')
@@ -357,7 +357,7 @@ def train(train_source_iter, train_target_iter, model, optimizer, lr_scheduler, 
         ## clean to noise
         y_t_softamx = F.softmax(y_t, dim=1)
         y_t_correct = y_t_softamx.mm(transMatrix.detach())
-        y_t_loss_correct = nn.KLDivLoss()(torch.log(y_t_correct), class_poster_t.detach()/args.temperature) #
+        y_t_loss_correct = nn.KLDivLoss()(torch.log(y_t_correct), class_poster_t.detach()) #
         cls_loss = F.cross_entropy(y_s, labels_s)
         reg_loss = reg(y_t, args.temperature)/(args.batch_size * args.mu)
         ### reg_loss = kld(y_t, args.num_class, args.temperature) / (args.batch_size * args.mu)
