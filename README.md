@@ -9,7 +9,7 @@ Code release for "Unsupervised domain adaptation via risk-consistent estimators"
 
 VisDA-2017
 ```
-CUDA_VISIBLE_DEVICES=0 python train_RCE.py visda-2017 -d VisDA2017 -s Synthetic -t Real -a resnet101 --per-class-eval --log logs/RCE/VisDA2017 --early 20 --mu 1
+CUDA_VISIBLE_DEVICES=0 python train_RCE.py visda-2017 -d VisDA2017 -s Synthetic -t Real -a resnet101 --per-class-eval --log logs/RCE/VisDA2017 --mu=1 --threshold 0.95 --trade-off1 0.8 --early 25
 ```
 
 Office Home
