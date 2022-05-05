@@ -77,7 +77,7 @@ def opts():
                         metavar='W', help='weight decay (default: 1e-3)', dest='weight_decay')
     parser.add_argument('-j', '--workers', default=8, type=int, metavar='N',
                         help='number of data loading workers (default: 8)')
-    parser.add_argument('--epochs', default=20, type=int, metavar='N', help='number of total epochs to run')
+    parser.add_argument('--epochs', default=30, type=int, metavar='N', help='number of total epochs to run')
     parser.add_argument('--early', default=20, type=int, metavar='N', help='number of total epochs to early stopping')
     parser.add_argument('-i', '--iters-per-epoch', default=1000, type=int, help='Number of iterations per epoch')
     parser.add_argument('-p', '--print-freq', default=100, type=int, metavar='N', help='print frequency (default: 100)')
@@ -314,7 +314,7 @@ def train(train_source_iter, train_target_iter, model, optimizer, lr_scheduler, 
 
         # generate target pseudo-labels
         max_prob, pred_u = torch.max(F.softmax(y_t, dim=1), dim=-1)
-        ssl_loss, _, = consistency_loss(y_t, y_t_u, T=1.0, p_cutoff=0.97)  ## fixmatch loss
+        ssl_loss, _, = consistency_loss(y_t, y_t_u, T=1.0, p_cutoff=args.threshold)  ## fixmatch loss
 
         ### train noise classifier: closed form
         f_t_norm = f_t / (torch.norm(f_t, dim=-1).reshape(f_t.shape[0], 1))
@@ -342,7 +342,7 @@ def train(train_source_iter, train_target_iter, model, optimizer, lr_scheduler, 
         anchor_mask = anchor_domain_predictor*anchor_acc
         anchor_points = labels_s[anchor_mask]
         target_test_pred_r_select = class_poster_s[anchor_mask]
-        weights = weightAnchor(f_s,temperature=args.temperature)
+        weights = weightAnchor(y_s,temperature=args.temperature)
         weight_anchor = weights[anchor_mask]
         #### estimate T
         with torch.no_grad():
@@ -353,6 +353,7 @@ def train(train_source_iter, train_target_iter, model, optimizer, lr_scheduler, 
                 else:
                     current = target_test_pred_r_select[indice][weight_anchor[indice].max(dim=0)[1]].detach()
                     transMatrix[k] = 0.01*current + 0.99* transMatrix[k] ##update
+
 
         ## clean to noise
         y_t_softamx = F.softmax(y_t, dim=1)
@@ -448,6 +449,3 @@ def validate(val_loader, model, args):
 
 if __name__ == '__main__':
     main()
-
-
-

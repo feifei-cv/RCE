@@ -23,18 +23,17 @@
 #CUDA_VISIBLE_DEVICES=0 python train_RCE.py office-home -d OfficeHome -s Rw -t Pr -a resnet50  --log logs/RCE/OfficeHome/OfficeHome_Rw2Pr --early 20
 
 ##### VisDA2017
-#CUDA_VISIBLE_DEVICES=0 python train_RCE.py visda-2017 -d VisDA2017 -s Synthetic -t Real -a resnet101 --per-class-eval --log logs/RCE/VisDA2017 --early 20 --mu=1
-#CUDA_VISIBLE_DEVICES=0 python train_RCE.py visda-2017 -d VisDA2017 -s Synthetic -t Real -a resnet101 --per-class-eval --log logs/RCE/VisDA2017 --early 20 --mu 1 --lr 0.005
-#CUDA_VISIBLE_DEVICES=0 python train_RCE.py visda-2017 -d VisDA2017 -s Synthetic -t Real -a resnet101 --per-class-eval --log logs/RCE/VisDA2017 --early 20 --mu=1 --temperature 1.8
+CUDA_VISIBLE_DEVICES=0 python train_RCE.py visda-2017 -d VisDA2017 -s Synthetic -t Real -a resnet101 --per-class-eval --log logs/RCE/VisDA2017 --mu=1 --threshold 0.95 --trade-off1 0.8 --early 25
+
 
 # Domainnet mu=3,2,1
-CUDA_VISIBLE_DEVICES=0 python train_RCE.py domainnet -d DomainNet -s c -t i -a resnet50 --early 20  --log logs/RCE/DomainNet/DomainNet_c2i --mu 3 --trade-off3 0.1
-CUDA_VISIBLE_DEVICES=0 python train_RCE.py domainnet -d DomainNet -s i -t p -a resnet50 --early 20  --log logs/RCE/DomainNet/DomainNet_i2p --mu 3 --trade-off3 0.1
-CUDA_VISIBLE_DEVICES=0 python train_RCE.py domainnet -d DomainNet -s p -t q -a resnet50 --early 20  --log logs/RCE/DomainNet/DomainNet_p2q --mu 3 --trade-off3 0.1
-CUDA_VISIBLE_DEVICES=0 python train_RCE.py domainnet -d DomainNet -s q -t r -a resnet50 --early 20  --log logs/RCE/DomainNet/DomainNet_q2r --mu 3 --trade-off3 0.1
-CUDA_VISIBLE_DEVICES=0 python train_RCE.py domainnet -d DomainNet -s r -t s -a resnet50 --early 20  --log logs/RCE/DomainNet/DomainNet_r2s --mu 3 --trade-off3 0.1
-CUDA_VISIBLE_DEVICES=0 python train_RCE.py domainnet -d DomainNet -s s -t c -a resnet50 --early 20  --log logs/RCE/DomainNet/DomainNet_s2c --mu 3 --trade-off3 0.1
-
+#CUDA_VISIBLE_DEVICES=0 python train_RCE.py domainnet -d DomainNet -s c -t i -a resnet50 --early 20  --log logs/RCE/DomainNet/DomainNet_c2i --mu 3 --trade-off3 0.1
+#CUDA_VISIBLE_DEVICES=0 python train_RCE.py domainnet -d DomainNet -s i -t p -a resnet50 --early 20  --log logs/RCE/DomainNet/DomainNet_i2p --mu 3 --trade-off3 0.1
+#CUDA_VISIBLE_DEVICES=0 python train_RCE.py domainnet -d DomainNet -s p -t q -a resnet50 --early 20  --log logs/RCE/DomainNet/DomainNet_p2q --mu 3 --trade-off3 0.1
+#CUDA_VISIBLE_DEVICES=0 python train_RCE.py domainnet -d DomainNet -s q -t r -a resnet50 --early 20  --log logs/RCE/DomainNet/DomainNet_q2r --mu 3 --trade-off3 0.1
+#CUDA_VISIBLE_DEVICES=0 python train_RCE.py domainnet -d DomainNet -s r -t s -a resnet50 --early 20  --log logs/RCE/DomainNet/DomainNet_r2s --mu 3 --trade-off3 0.1
+#CUDA_VISIBLE_DEVICES=0 python train_RCE.py domainnet -d DomainNet -s s -t c -a resnet50 --early 20  --log logs/RCE/DomainNet/DomainNet_s2c --mu 3 --trade-off3 0.1
+#
 
 ###########
 #CUDA_VISIBLE_DEVICES=0 python train_RCE.py domainnet -d DomainNet -s c -t i -a resnet101 --early 20  -i 2500 -p 500  --bottleneck-dim 1024  --log logs/RCE/DomainNet/DomainNet_c2i --mu 1
