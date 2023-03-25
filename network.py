@@ -21,10 +21,12 @@ class ImageClassifier(nn.Module):
     def __init__(self, backbone: nn.Module, num_classes: int, bottleneck: Optional[nn.Module] = None,
                  bottleneck_dim: Optional[int] = -1, head: Optional[nn.Module] = None, finetune=True):
         super(ImageClassifier, self).__init__()
-        self.backbone = nn.Sequential(backbone,nn.AdaptiveAvgPool2d(output_size=(1, 1)),
-            nn.Flatten())
+        # self.backbone = nn.Sequential(backbone,nn.AdaptiveAvgPool2d(output_size=(1, 1)),
+        #     nn.Flatten())
+        self.backbone = backbone ### vision transformer
         bottleneck = nn.Sequential(
             nn.Linear(backbone.out_features, bottleneck_dim),
+            # nn.Linear(backbone.embed_dim, bottleneck_dim),## vision transformer
             nn.BatchNorm1d(bottleneck_dim),
             nn.ReLU()
         )
